@@ -6,4 +6,5 @@ Kind of like multitail but doesnt require any TTY, and is much dumber.
 # Usage
 
 This will tail all files in /var/log for new lines and watch for new files.
-./folder-tailer /var/log
+
+`./folder-tailer /var/log`
