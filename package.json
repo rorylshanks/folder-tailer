@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chokidar": "^3.3.1",
-    "tail": "^2.0.3"
+    "chokidar": "^3.5.3",
+    "tail": "^2.2.6"
   }
 }

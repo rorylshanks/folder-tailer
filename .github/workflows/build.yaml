@@ -1,0 +1,53 @@
+name: Build
+
+# Controls when the workflow will run
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Get the repository's code
+      - name: Checkout
+        uses: actions/checkout@v2
+      # https://github.com/docker/setup-qemu-action
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      # https://github.com/docker/setup-buildx-action
+      - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v1
+        with:
+          username: rorylshanks
+          password: ${{ secrets.DOCKERHUB_LOGIN_TOKEN }}
+      - name: Run build and push
+        run: bash build.sh
+        env:
+          TAG: ${{ github.ref }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: 'Description of the release'
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Assets
+        run: |
+          for file in build/*; do
+            if [ -f "$file" ]; then
+              echo "Uploading $file"
+              curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                   -H "Content-Type: $(file -b --mime-type "$file")" \
+                   --data-binary @"$file" \
+                   "${{ steps.create_release.outputs.upload_url }}?name=$(basename "$file")"
+            fi
+          done
