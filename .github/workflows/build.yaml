@@ -13,6 +13,13 @@ jobs:
       # Get the repository's code
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Extract tag name
+        id: tag
+        uses: actions/github-script@0.2.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            return context.payload.ref.replace(/\/refs\/tags\//, '');
       # https://github.com/docker/setup-qemu-action
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -26,7 +33,7 @@ jobs:
       - name: Run build and push
         run: bash build.sh
         env:
-          TAG: ${{ github.ref }}
+          TAG: ${{ steps.tag.outputs.result }}
 
       - name: Create Release
         id: create_release
