@@ -45,8 +45,3 @@ We welcome contributions to this project! If you have suggestions or improvement
 This project is open-sourced under [MIT License](LICENSE).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## Acknowledgments
-This project is based on gotemplate by Coveo. Visit their GitHub repository for more information about the tool: [coveooss/gotemplate](https://github.com/coveooss/gotemplate).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
